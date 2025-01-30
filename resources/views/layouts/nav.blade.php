@@ -44,7 +44,7 @@
 
     <body class="app">
         <header class="app-header fixed-top h-16">
-            @yield('header')
+            @include('layouts.navigation')
             <x-side-bar />
         </header><!--//app-header-->
 

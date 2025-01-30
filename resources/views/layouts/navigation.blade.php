@@ -16,6 +16,7 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
                 </div>
+                <x-search-layout/>
             </div>
 
             <!-- Settings Dropdown -->

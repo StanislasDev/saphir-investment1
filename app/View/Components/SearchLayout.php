@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class AppHeaderLayout extends Component
+class SearchLayout extends Component
 {
     /**
      * Create a new component instance.
@@ -21,6 +21,6 @@ class AppHeaderLayout extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.app-header-layout');
+        return view('components.search-layout');
     }
 }
