@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('projects', function (Blueprint $table) {
-            $table->id();
+            $table->id();   
             $table->string('title'); // titre du projet
             $table->text('description'); // description du projet en texte long
             $table->string('category'); //Catégorie, ex. : Immobilier, Technologie
@@ -21,8 +21,8 @@ return new class extends Migration
             $table->date('start_date'); //Date de début de collecte
             $table->date('end_date'); //Date limite pour investir
             $table->decimal('return_rate', 5, 2); //Taux de retour sur investissement
-            $table->string('risk_level'); // faible, moyen, élevé (risque)
-            $table->string('status'); // en cours, terminé, annulé
+            $table->enum('status', ['en cours', 'terminé', 'annulé'])->default('en cours'); // en cours, terminé, annulé
+            $table->string('image')->nullable(); // Colonne pour l'image du projet, facultative
             $table->timestamps();
         });
     }

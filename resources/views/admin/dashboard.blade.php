@@ -4,7 +4,7 @@
 
 
 @section('content')
-    <!-- Bouton pour ouvrir la modal -->
+    {{-- <!-- Bouton pour ouvrir la modal -->
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
         Ouvrir la modal
     </button>
@@ -18,15 +18,52 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Contenu de la modal.
+                    <div class="container">
+                        <h1 class="mb-4">Créer un nouveau projet</h1>
+                    
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+                    
+                        <form action="{{ route('admin.projects.store') }}" method="POST">
+                            @csrf
+                            <div class="mb-3">
+                                <label for="title" class="form-label">Titre</label>
+                                <input type="text" class="form-control" id="title" name="title" value="{{ old('title') }}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Description</label>
+                                <textarea class="form-control" id="description" name="description">{{ old('description') }}</textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="goal_amount" class="form-label">Montant recherché</label>
+                                <input type="number" step="0.01" class="form-control" id="goal_amount" name="goal_amount" value="{{ old('goal_amount') }}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="start_date" class="form-label">Date de début</label>
+                                <input type="date" class="form-control" id="start_date" name="start_date" value="{{ old('start_date') }}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="end_date" class="form-label">Date de fin</label>
+                                <input type="date" class="form-control" id="end_date" name="end_date" value="{{ old('end_date') }}">
+                            </div>
+                            <button type="submit" class="btn btn-success">Créer le projet</button>
+                        </form>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                    <button type="button" class="btn btn-primary">Enregistrer</button>
+                    <button type="submit" class="btn btn-primary">Créer le projet</button>
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
     <div class="row g-4 mb-3 mt-3">
         <div class="col-6 col-lg-3">
             <div class="app-card app-card-stat shadow-sm h-100">
