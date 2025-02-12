@@ -1,6 +1,6 @@
 @extends('layouts.nav')
 
-@section('title', 'Tableau de bord Admin')
+@section('title', 'Tableau de bord Admin:Projects')
 
 
 @section('content')
@@ -71,7 +71,7 @@
                         aria-labelledby="editProjectModalLabel{{ $project->id }}" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
-                                <form action="{{-- {{ route('admin.projects.update', $project->id) }} --}}" method="POST">
+                                <form action="{{ route('admin.projects.update', $project->id) }}" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     @method('PUT')
                                     <div class="modal-header">
@@ -148,31 +148,31 @@
                                                 </option>
                                             </select>
                                         </div>
-                                        <!-- Exemple dans le modal d'édition -->
+                                        <!-- Image existante -->
                                         <div class="mb-3">
-                                            <label for="image{{ $project->id }}" class="form-label">Image du
-                                                projet</label>
-                                            <input type="file" class="form-control" id="image{{ $project->id }}"
-                                                name="image" accept="image/*">
+                                            <label for="image{{ $project->id }}" class="form-label">Image du projet</label>
+                                            <input type="file" class="form-control" id="image{{ $project->id }}" name="image" accept="image/*" onchange="previewImageUpdate(event, {{ $project->id }})">
+
                                             @if ($project->image)
                                                 <div class="mt-2">
-                                                    <img src="{{ asset('storage/' . $project->image) }}"
-                                                        alt="Image du projet" style="max-width: 100px;">
+                                                    <img id="imageUpdate{{ $project->id }}" src="{{ asset('storage/' . $project->image) }}" alt="Image du projet" style="max-width: 100px;">
+                                                </div>
+                                            @else
+                                                <div class="mt-2">
+                                                    <img id="imageUpdate{{ $project->id }}" src="" alt="Aperçu de l'image" style="max-width: 100px; display: none;">
                                                 </div>
                                             @endif
-
-                                            {{-- Photo Preview:
-                                <img src="{{ $project->image->temporaryUrl() }}"> --}}
                                         </div>
+
+                                    </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary"
+                                        <button type="button" class="btn btn-secondary cursor-pointer"
                                             data-bs-dismiss="modal">Annuler</button>
-                                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                                        <button type="submit" class="btn btn-success cursor-pointer">Enregistrer</button>
                                     </div>
                                 </form>
                             </div>
-                        </div>
                     </div>
                     <!-- Fin du modal d'édition -->
                 @endforeach
@@ -231,10 +231,15 @@
                         <!-- Le statut sera par défaut "en cours" -->
                     </div>
                     <!-- ... dans le modal de création -->
-                    <div class="mb-3">
-                        <label for="image" class="form-label">Image du projet</label>
-                        <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                    <div class="flex flex-col items-center">
+                        <label for="image" class="font-bold">Image du projet :</label>
+                        <input type="file" name="image" id="image" accept="image/*" onchange="previewImage(event)" class="mt-2 p-2 border rounded">
+                        
+                        <div class="mt-4">
+                            <img id="imagePreview" src="" alt="Aperçu de l'image" class="hidden w-48 h-48 object-cover rounded-lg shadow-md">
+                        </div>
                     </div>
+                    
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
                         <button type="submit" class="btn btn-success">Créer le projet</button>
@@ -244,4 +249,33 @@
         </div>
     </div>
     <!-- Fin du modal de création -->
+<script>
+    // Funtion pour afficher l'aperçu lors de la création
+function previewImage(event) {
+    let input = event.target;
+    let reader = new FileReader();
+    
+    reader.onload = function() {
+        let imagePreview = document.getElementById('imagePreview');
+        imagePreview.src = reader.result;
+        imagePreview.classList.remove('hidden'); // Afficher l'image
+    };
+    
+    reader.readAsDataURL(input.files[0]); // Lire l'image
+}
+
+// Funtion pour afficher l'aperçu lors de l'édition
+function previewImageUpdate(event, projectId) {
+    let input = event.target;
+    let reader = new FileReader();
+
+    reader.onload = function() {
+        let imagePreview = document.getElementById('imageUpdate' + projectId);
+        imagePreview.src = reader.result;
+        imagePreview.style.display = 'block'; // Afficher l'image
+    };
+
+    reader.readAsDataURL(input.files[0]); // Lire l'image
+}
+</script>
 @endsection

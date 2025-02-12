@@ -68,7 +68,7 @@ class ProjectController extends Controller
             'end_date'        => 'required|date|after_or_equal:start_date',
             'return_rate'     => 'required|numeric',
             'status'          => 'required|in:en cours,terminé,annulé',
-            'image'           => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+            'image'           => 'image|mimes:jpeg,png,jpg|max:2048'
         ]);
 
          // Traitement du fichier image, si un nouveau fichier est uploadé
