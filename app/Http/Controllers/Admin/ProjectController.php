@@ -55,34 +55,44 @@ class ProjectController extends Controller
     /**
      * Met à jour un projet existant.
      */
-    public function update(Request $request, $id)
+
+    public function edit($id)
     {
-        $project = Project::findOrFail($id);
+            $project = Project::findOrFail($id);
+            return view('admin.projects.edit', compact('project'));
+    }
+    public function update(Request $request, $id)
+{
+    $project = Project::findOrFail($id);
 
-        $validated = $request->validate([
-            'title'           => 'required|string|max:255',
-            'description'     => 'required|string',
-            'category'        => 'required|string|max:255',
-            'goal_amount'     => 'required|numeric',
-            'start_date'      => 'required|date',
-            'end_date'        => 'required|date|after_or_equal:start_date',
-            'return_rate'     => 'required|numeric',
-            'status'          => 'required|in:en cours,terminé,annulé',
-            'image'           => 'image|mimes:jpeg,png,jpg|max:2048'
-        ]);
-
-         // Traitement du fichier image, si un nouveau fichier est uploadé
+    $validated = $request->validate([
+        'title'        => 'required|string|max:255',
+        'description'  => 'required|string',
+        'category'     => 'required|string|max:255',
+        'goal_amount'  => 'required|numeric',
+        'start_date'   => 'required|date',
+        'end_date'     => 'required|date|after_or_equal:start_date',
+        'return_rate'  => 'required|numeric',
+        'status'       => 'required|in:en cours,terminé,annulé',
+        'image'        => 'image|mimes:jpeg,png,jpg|max:2048',
+        
+    ]);
+    // Traitement de l’image
     if ($request->hasFile('image')) {
-        // Optionnel : supprimer l'ancienne image si elle existe
-        Storage::disk('public')->delete($project->image);
-
+        // Supprime l'ancienne image si elle existe
+        if ($project->image) {
+            Storage::delete('public/' . $project->image);
+        }
+        // Stocke la nouvelle image
         $validated['image'] = $request->file('image')->store('projects', 'public');
     }
 
-        $project->update($validated);
+    // Mise à jour du projet
+    $project->update($validated);
 
-        return redirect()->route('admin.projects.index')->with('success', 'Projet mis à jour avec succès.');
-    }
+    return redirect()->route('admin.projects.index')->with('success', 'Projet mis à jour avec succès.');
+}
+
 
     /**
      * Supprime un projet.

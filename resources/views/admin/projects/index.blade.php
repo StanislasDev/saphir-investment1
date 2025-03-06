@@ -52,12 +52,15 @@
 
                         <td>
                             <!-- Bouton Modifier : ouvre le modal d'édition du projet -->
-                            <button type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal"
+                            {{-- <button type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal"
                                 data-bs-target="#editProjectModal{{ $project->id }}">
                                 Modifier
-                            </button>
+                            </button> --}}
+                            <a href="{{ route('admin.projects.edit', $project->id) }}" class="btn btn-sm btn-warning">
+                                Modifier
+                            </a>
                             <!-- Formulaire de suppression -->
-                            <form action="{{-- {{ route('admin.projects.destroy', $project->id) }} --}}" method="POST" style="display:inline-block;">
+                            <form action="{{ route('admin.projects.destroy', $project->id) }}" method="POST" style="display:inline-block;">
                                 @csrf
                                 @method('DELETE')
                                 <button class="btn btn-sm btn-danger"
@@ -71,6 +74,18 @@
                         aria-labelledby="editProjectModalLabel{{ $project->id }}" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
+                                @if (session('success'))
+                                    <div class="alert alert-success">{{ session('success') }}</div>
+                                @endif
+                                @if ($errors->any())
+                                    <div class="alert alert-danger">
+                                        <ul>
+                                            @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endif
                                 <form action="{{ route('admin.projects.update', $project->id) }}" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     @method('PUT')
@@ -150,29 +165,35 @@
                                         </div>
                                         <!-- Image existante -->
                                         <div class="mb-3">
-                                            <label for="image{{ $project->id }}" class="form-label">Image du projet</label>
-                                            <input type="file" class="form-control" id="image{{ $project->id }}" name="image" accept="image/*" onchange="previewImageUpdate(event, {{ $project->id }})">
+                                            <label for="image{{ $project->id }}" class="form-label">Image du
+                                                projet</label>
+                                            <input type="file" class="form-control" id="image{{ $project->id }}"
+                                                name="image" accept="image/*"
+                                                onchange="previewImageUpdate(event, {{ $project->id }})">
 
                                             @if ($project->image)
                                                 <div class="mt-2">
-                                                    <img id="imageUpdate{{ $project->id }}" src="{{ asset('storage/' . $project->image) }}" alt="Image du projet" style="max-width: 100px;">
+                                                    <img id="imageUpdate{{ $project->id }}"
+                                                        src="{{ asset('storage/' . $project->image) }}"
+                                                        alt="Image du projet" style="max-width: 100px;">
                                                 </div>
                                             @else
                                                 <div class="mt-2">
-                                                    <img id="imageUpdate{{ $project->id }}" src="" alt="Aperçu de l'image" style="max-width: 100px; display: none;">
+                                                    <img id="imageUpdate{{ $project->id }}" src=""
+                                                        alt="Aperçu de l'image" style="max-width: 100px; display: none;">
                                                 </div>
                                             @endif
                                         </div>
 
                                     </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary cursor-pointer"
-                                            data-bs-dismiss="modal">Annuler</button>
-                                        <button type="submit" class="btn btn-success cursor-pointer">Enregistrer</button>
-                                    </div>
-                                </form>
                             </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary cursor-pointer"
+                                    data-bs-dismiss="modal">Annuler</button>
+                                <button type="submit" class="btn btn-success cursor-pointer">Mettre à jour</button>
+                            </div>
+                        </form>
+                        </div>
                     </div>
                     <!-- Fin du modal d'édition -->
                 @endforeach
@@ -233,13 +254,15 @@
                     <!-- ... dans le modal de création -->
                     <div class="flex flex-col items-center">
                         <label for="image" class="font-bold">Image du projet :</label>
-                        <input type="file" name="image" id="image" accept="image/*" onchange="previewImage(event)" class="mt-2 p-2 border rounded">
-                        
+                        <input type="file" name="image" id="image" accept="image/*"
+                            onchange="previewImage(event)" class="mt-2 p-2 border rounded">
+
                         <div class="mt-4">
-                            <img id="imagePreview" src="" alt="Aperçu de l'image" class="hidden w-48 h-48 object-cover rounded-lg shadow-md">
+                            <img id="imagePreview" src="" alt="Aperçu de l'image"
+                                class="hidden w-48 h-48 object-cover rounded-lg shadow-md">
                         </div>
                     </div>
-                    
+
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
                         <button type="submit" class="btn btn-success">Créer le projet</button>
@@ -249,33 +272,33 @@
         </div>
     </div>
     <!-- Fin du modal de création -->
-<script>
-    // Funtion pour afficher l'aperçu lors de la création
-function previewImage(event) {
-    let input = event.target;
-    let reader = new FileReader();
-    
-    reader.onload = function() {
-        let imagePreview = document.getElementById('imagePreview');
-        imagePreview.src = reader.result;
-        imagePreview.classList.remove('hidden'); // Afficher l'image
-    };
-    
-    reader.readAsDataURL(input.files[0]); // Lire l'image
-}
+    <script>
+        // Funtion pour afficher l'aperçu lors de la création
+        function previewImage(event) {
+            let input = event.target;
+            let reader = new FileReader();
 
-// Funtion pour afficher l'aperçu lors de l'édition
-function previewImageUpdate(event, projectId) {
-    let input = event.target;
-    let reader = new FileReader();
+            reader.onload = function() {
+                let imagePreview = document.getElementById('imagePreview');
+                imagePreview.src = reader.result;
+                imagePreview.classList.remove('hidden'); // Afficher l'image
+            };
 
-    reader.onload = function() {
-        let imagePreview = document.getElementById('imageUpdate' + projectId);
-        imagePreview.src = reader.result;
-        imagePreview.style.display = 'block'; // Afficher l'image
-    };
+            reader.readAsDataURL(input.files[0]); // Lire l'image
+        }
 
-    reader.readAsDataURL(input.files[0]); // Lire l'image
-}
-</script>
+        // Funtion pour afficher l'aperçu lors de l'édition
+        function previewImageUpdate(event, projectId) {
+            let input = event.target;
+            let reader = new FileReader();
+
+            reader.onload = function() {
+                let imagePreview = document.getElementById('imageUpdate' + projectId);
+                imagePreview.src = reader.result;
+                imagePreview.style.display = 'block'; // Afficher l'image
+            };
+
+            reader.readAsDataURL(input.files[0]); // Lire l'image
+        }
+    </script>
 @endsection
