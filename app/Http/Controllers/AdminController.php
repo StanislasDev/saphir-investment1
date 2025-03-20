@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Project;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -10,7 +11,8 @@ class AdminController extends Controller
     public function index()
     {
         $userCount = User::count();                       // Nombre total d'utilisateurs
-        return view('admin.dashboard',compact('userCount'));
+        $projectsCount = Project::count();           // Nombre total d'investissements
+        return view('admin.dashboard',compact('userCount','projectsCount'));
     }
     
          /* Liste tous les utilisateurs de la plateforme. */
@@ -25,6 +27,14 @@ class AdminController extends Controller
         $user = User::findOrFail($id); // Trouve l'utilisateur par ID ou renvoie une erreur 404
 
         return view('admin.users.show', compact('user'));
+    }
+
+    public function deleteUser($id)
+    {
+        $user = User::findOrFail($id); // Trouve l'utilisateur par ID
+        $user->delete();               // Supprime l'utilisateur
+
+        return redirect()->route('admin.users')->with('success', 'Utilisateur supprimé avec succès.');
     }
 }
 

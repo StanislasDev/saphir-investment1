@@ -12,12 +12,12 @@
         @endif
 
         <!-- Bouton d'ouverture du modal de création -->
-        <button type="button" class="btn btn-primary my-3" data-bs-toggle="modal" data-bs-target="#createProjectModal">
+        <button type="button" class="my-3 btn btn-primary" data-bs-toggle="modal" data-bs-target="#createProjectModal">
             Créer un nouveau projet
         </button>
 
         <!-- Tableau des projets -->
-        <table class="table table-bordered">
+        <table class="table">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -188,9 +188,9 @@
                                     </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary cursor-pointer"
+                                <button type="button" class="cursor-pointer btn btn-secondary"
                                     data-bs-dismiss="modal">Annuler</button>
-                                <button type="submit" class="btn btn-success cursor-pointer">Mettre à jour</button>
+                                <button type="submit" class="cursor-pointer btn btn-success">Mettre à jour</button>
                             </div>
                         </form>
                         </div>
@@ -255,11 +255,11 @@
                     <div class="flex flex-col items-center">
                         <label for="image" class="font-bold">Image du projet :</label>
                         <input type="file" name="image" id="image" accept="image/*"
-                            onchange="previewImage(event)" class="mt-2 p-2 border rounded">
+                            onchange="previewImage(event)" class="p-2 mt-2 border rounded">
 
                         <div class="mt-4">
                             <img id="imagePreview" src="" alt="Aperçu de l'image"
-                                class="hidden w-48 h-48 object-cover rounded-lg shadow-md">
+                                class="hidden object-cover w-48 h-48 rounded-lg shadow-md">
                         </div>
                     </div>
 
